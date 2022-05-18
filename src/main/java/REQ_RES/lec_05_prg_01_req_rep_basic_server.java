@@ -7,16 +7,18 @@ public class lec_05_prg_01_req_rep_basic_server {
     public static void main (String args[]){
         ZContext context = new ZContext();
         ZMQ.Socket socket = context.createSocket(SocketType.REP);
-        socket.bind("tcp://*:5555");
+        socket.bind("tcp://localhost:5555");
 
         while(true){
+
             byte[] message = socket.recv();
             System.out.println("Received request: " + message);
             try {
-                Thread.sleep(100000);
+                Thread.sleep(100);
             } catch(Exception e){
 
-            }String response = "World";
+            }
+            String response = "World";
             socket.send(response.getBytes(ZMQ.CHARSET), 0);
         }
 
