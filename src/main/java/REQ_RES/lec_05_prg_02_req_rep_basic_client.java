@@ -17,7 +17,8 @@ public class lec_05_prg_02_req_rep_basic_client {
 
             socket.send(req.getBytes(ZMQ.CHARSET), 0);
             byte[] message = socket.recv();
-            System.out.println("Received replay " + request + "[" + message + "]");
+            String s_message = new String(message);
+            System.out.println("Received replay " + request + " [ " + s_message + " ]");
         }
     }
 }

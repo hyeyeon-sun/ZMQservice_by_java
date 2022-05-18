@@ -12,9 +12,10 @@ public class lec_05_prg_01_req_rep_basic_server {
         while(true){
 
             byte[] message = socket.recv();
-            System.out.println("Received request: " + message);
+            String s_message = new String(message);
+            System.out.println("Received request: " + s_message);
             try {
-                Thread.sleep(100);
+                Thread.sleep(1000);
             } catch(Exception e){
 
             }
