@@ -19,6 +19,8 @@ public class lec_05_prg_03_pub_sub_basic_server {
             int relhumidity = (int)(Math.random()*49+10);
 
             String response = Integer.toString(zipcode) +" "+ Integer.toString(temperature) +" "+ Integer.toString(relhumidity);
+            socket.send(response);
+
             System.out.println(response);
         }
     }
