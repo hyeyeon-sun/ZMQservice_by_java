@@ -30,7 +30,10 @@ public class lec_05_prg_04_pub_sub_basic_client {
             String relhumidity = info[2];
             total_temp += Integer.parseInt(temperature);
 
-            System.out.println("Receive temperature for zipcode" + zip_filter + "was" + temperature);
+            System.out.println("Receive temperature for zipcode " + zip_filter + " was " + temperature);
         }
+
+        System.out.println("Average temperature for zipcode " + zip_filter + " was " + total_temp/20);
+
     }
 }
