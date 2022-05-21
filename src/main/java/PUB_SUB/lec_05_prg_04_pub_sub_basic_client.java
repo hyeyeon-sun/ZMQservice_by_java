@@ -9,17 +9,13 @@ public class lec_05_prg_04_pub_sub_basic_client {
         ZMQ.Socket socket = context.createSocket(SocketType.SUB);
 
         System.out.println("Collecting updates from seather server...");
-        socket.subscribe("".getBytes());
+
         socket.connect("tcp://localhost:5555");
 
         //system argument//
 
         String zip_filter = "10001";
-
-        //set socket opt//
-
-        String s = socket.recvStr();
-        System.out.println(s);
+        socket.subscribe(zip_filter.getBytes());
 
         int total_temp = 0;
         for (int update_nbr = 0; update_nbr<20; update_nbr++){
@@ -30,7 +26,7 @@ public class lec_05_prg_04_pub_sub_basic_client {
             String relhumidity = info[2];
             total_temp += Integer.parseInt(temperature);
 
-            System.out.println("Receive temperature for zipcode " + zip_filter + " was " + temperature);
+            System.out.println("Receive temperature for zipcode " + zip_filter + " was " + zipcode);
         }
 
         System.out.println("Average temperature for zipcode " + zip_filter + " was " + total_temp/20);
