@@ -12,9 +12,13 @@ public class lec_05_prg_04_pub_sub_basic_client {
 
         socket.connect("tcp://localhost:5555");
 
-        //system argument//
+        String zip_filter;
 
-        String zip_filter = "10001";
+        if (Args.length>0){
+            zip_filter = Args[0] + " ";
+        }else{
+            zip_filter = "10001";
+        }
         socket.subscribe(zip_filter.getBytes());
 
         int total_temp = 0;
