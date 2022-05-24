@@ -13,10 +13,10 @@ public class lec_05_prg_06_pub_sub_and_pull_push_client {
         ZMQ.Socket publisher = context.createSocket(SocketType.PUSH);
         publisher.connect("tcp://localhost:5558");
 
-        boolean condition = true;//poll 관련 boolean 조건 쓰기
+        //poller
 
         while(true){
-            if(condition){
+            if(subscriber.getEvents() != 0 && ZMQ.Poller.POLLIN != 0 && subscriber.setReceiveTimeOut(10000)){
                 byte[] message = subscriber.recv();
                 String s_message = new String(message);
                 System.out.println("I: received message " + s_message);
