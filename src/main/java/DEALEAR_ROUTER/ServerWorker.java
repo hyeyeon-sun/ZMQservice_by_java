@@ -24,13 +24,16 @@ public class ServerWorker extends Thread {
             ZMsg receivedmsg = ZMsg.recvMsg(worker);
             ArrayList<String> info = new ArrayList<String>();
 
-            for (ZFrame msg : receivedmsg){
-                String s_message = new String(msg.getData());
-                info.add(s_message);
-            }
-            String ident = info.get(0);
-            String msg = info.get(1);
+            ZFrame f_ident = receivedmsg.pop();
+            ZFrame f_msg = receivedmsg.pop();
+            assert (f_msg != null);
+            receivedmsg.destroy();
+
+            String ident = new String(f_ident.getData());
+            String msg = new String(f_msg.getData());
+
             System.out.println("Worker#"+this.id+" received "+msg+" from "+ident);
+            worker.send(msg);
 
 
             /* 기본 send 버전
