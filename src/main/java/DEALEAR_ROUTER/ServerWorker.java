@@ -33,7 +33,8 @@ public class ServerWorker extends Thread {
             String msg = new String(f_msg.getData());
 
             System.out.println("Worker#"+this.id+" received "+msg+" from "+ident);
-            worker.send(msg);
+            f_ident.send(worker, ZFrame.REUSE + ZFrame.MORE);
+            f_msg.send(worker, ZFrame.REUSE);
 
 
             /* 기본 send 버전

@@ -36,16 +36,12 @@ public class ClientTask extends Thread{
                 Thread.sleep(1000);
             }catch(Exception e){
             }
-            byte[] msgg = socket.recv();
-            String s_messagee = new String(msgg);
-            System.out.println(s_messagee);
 
             int socket_num = poll.poll(1000);
-            System.out.println(Integer.toString(socket_num));
             if(socket_num > 0){
                 byte[] msg = socket.recv();
                 String s_message = new String(msg);
-                System.out.println(identity + "received: "+s_message);
+                System.out.println(identity + " received: "+s_message);
             }
         }
     }
