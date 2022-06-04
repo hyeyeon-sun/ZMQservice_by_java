@@ -22,6 +22,7 @@ public class ServerWorker extends Thread {
         while(true){
             byte[] message = worker.recv();
             String s_message = new String(message);
+            System.out.println(s_message);
             //jeromq 에는 multipart를 보내는 메서드가 없기에 split으로 구현
             String[] messages = s_message.split(" ");
             String ident = messages[0];

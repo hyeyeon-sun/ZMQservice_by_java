@@ -22,7 +22,7 @@ public class ClientTask extends Thread{
         ZMQ.Socket socket = context.createSocket(SocketType.DEALER);
         String identity = Integer.toString(this.id);
         socket.setIdentity(identity.getBytes(StandardCharsets.US_ASCII));
-        socket.connect("tcp://localhost:5570");
+        socket.connect("tcp://localhost:5557");
         System.out.println("Client " + identity + " started");
         ZPoller poll = new ZPoller(context);
         poll.register(socket, ZMQ.Poller.POLLIN);
