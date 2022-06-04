@@ -1,8 +1,8 @@
 package DEALEAR_ROUTER;
 
-import org.zeromq.SocketType;
-import org.zeromq.ZContext;
-import org.zeromq.ZMQ;
+import org.zeromq.*;
+
+import java.util.ArrayList;
 
 public class ServerWorker extends Thread {
     ZContext context;
@@ -20,6 +20,20 @@ public class ServerWorker extends Thread {
         worker.connect("inproc://backend");
         System.out.println("Worker#" + Integer.toString(this.id) + " started");
         while(true){
+            //receive-multipart 버전
+            ZMsg receivedmsg = ZMsg.recvMsg(worker);
+            ArrayList<String> info = new ArrayList<String>();
+
+            for (ZFrame msg : receivedmsg){
+                String s_message = new String(msg.getData());
+                info.add(s_message);
+            }
+            String ident = info.get(0);
+            String msg = info.get(1);
+            System.out.println("Worker#"+this.id+" received "+msg+" from "+ident);
+
+
+            /* 기본 send 버전
             byte[] message = worker.recv();
             String s_message = new String(message);
             System.out.println(s_message);
@@ -29,6 +43,7 @@ public class ServerWorker extends Thread {
             String msg = messages[1];
             System.out.println(s_message);
             worker.send(ident + " " + message);
+             */
         }
     }
 }

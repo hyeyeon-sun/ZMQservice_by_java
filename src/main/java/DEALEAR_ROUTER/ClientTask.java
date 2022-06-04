@@ -9,9 +9,9 @@ import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 public class ClientTask extends Thread{
-    int id;
+    String id;
 
-    public ClientTask(int id){
+    public ClientTask(String id){
         super();
         this.id = id;
     }
@@ -20,7 +20,7 @@ public class ClientTask extends Thread{
     public void run() {
         ZContext context = new ZContext();
         ZMQ.Socket socket = context.createSocket(SocketType.DEALER);
-        String identity = Integer.toString(this.id);
+        String identity = this.id;
         socket.setIdentity(identity.getBytes(StandardCharsets.US_ASCII));
         socket.connect("tcp://localhost:5557");
         System.out.println("Client " + identity + " started");
