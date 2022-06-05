@@ -18,6 +18,12 @@ public class lec_05_prg_05_pub_sub_and_pull_push_server {
             String s_message = new String(message);
             System.out.println("I: publishing update " + s_message);
             publisher.send(message);
+            try{
+                Thread.sleep(500);
+            }catch(Exception e){
+
+            }
+
         }
     }
 }
