@@ -4,6 +4,8 @@ import org.zeromq.SocketType;
 import org.zeromq.ZContext;
 import org.zeromq.ZMQ;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 
 public class lec_05_prg_12_p2p_dechat {
@@ -11,14 +13,15 @@ public class lec_05_prg_12_p2p_dechat {
     public static String search_nameserver(String ip_mask, String local_ip_addr, int port_nameserver) {
         ZContext context = new ZContext();
         ZMQ.Socket req = context.createSocket(SocketType.SUB);
-        for (int i = 1; i < 255; i++) {
-            String target_ip_addr = "tcp://" + ip_mask + "."/*+last*/ + ":" + port_nameserver;
+        for (int last = 1; last < 255; last++) {
+            String target_ip_addr = "tcp://" + ip_mask + "."+last+ ":" + port_nameserver;
             if (target_ip_addr != local_ip_addr || target_ip_addr == local_ip_addr) {
                 req.connect(target_ip_addr);
             }
-            /*req.setsockopt(zmq.RCVTIMEO, 2000)*/
+            req.setReceiveTimeOut(2000);
             req.subscribe("NAMESERVER".getBytes());
         }
+
         try {
             String res = req.recvStr();
             String[] res_list = res.split(":");
@@ -73,7 +76,9 @@ public class lec_05_prg_12_p2p_dechat {
         ZMQ.Socket publisher = context.createSocket(SocketType.PUB);
         publisher.bind("tcp://" + local_ip_addr + ":" + port_chat_publisher);
         ZMQ.Socket collector = context.createSocket(SocketType.PULL);
-        collector.bind("local p2p relay server activated at tcp://" + local_ip_addr + ":" + port_chat_publisher + " & " + port_chat_collector + ".");
+        collector.bind("tcp://"+local_ip_addr+":"+port_chat_collector);
+        System.out.println("local p2p relay server activated at tcp://" + local_ip_addr + ":" + port_chat_publisher + " & " + port_chat_collector + ".");
+
         while (true) {
             try {
                 String message = collector.recvStr();
@@ -85,12 +90,15 @@ public class lec_05_prg_12_p2p_dechat {
         }
     }
 
-    /*
-    public String get_local_ip() {
+    public static String get_local_ip() {
+        InetAddress local;
         try {
-
-        } catch (Exception e) {
-
+            local = InetAddress.getLocalHost();
+            String ip = local.getHostAddress();
+            return ip;
+        } catch (UnknownHostException e1) {
+            e1.printStackTrace();
+            return "127.0.0.1";
         }
-    }*/
+    }
 }

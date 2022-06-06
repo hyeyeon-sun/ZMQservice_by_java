@@ -13,10 +13,11 @@ public class lec_05_prg_12_p2p_dechat_test {
         int port_subscribe = 9004;
 
         String user_name = args[0];
-        String ip_addr = "127.0.0.1";
-        String ip_mask = ip_addr.split(".", 1)[0];
+        String ip_addr = lec_05_prg_12_p2p_dechat.get_local_ip();
+        String ip_mask = ip_addr.substring(0,ip_addr.lastIndexOf("."));
 
         System.out.println("searching for p2p server.");
+
 
         String name_server_ip_addr = lec_05_prg_12_p2p_dechat.search_nameserver(ip_mask, ip_addr, port_nameserver);
         if (name_server_ip_addr == null){
