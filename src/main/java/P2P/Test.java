@@ -1,5 +1,9 @@
 package P2P;
 
+import org.zeromq.SocketType;
+import org.zeromq.ZContext;
+import org.zeromq.ZMQ;
+
 import java.util.StringTokenizer;
 
 public class Test {
@@ -33,6 +37,33 @@ public class Test {
             Thread relay_thread = new Thread(relay_runnable);
             relay_thread.start();
             System.out.println("p2p message relay server is activated.");
+        }else{
+            ip_addr_p2p_server = name_server_ip_addr;
+            System.out.println("p2p server found at " + ip_addr_p2p_server + ", and p2p client mode is activated.");
         }
+        System.out.println("starting user registration procedure.");
+
+        ZContext db_client_context = new ZContext();
+        ZMQ.Socket db_client_socket = db_client_context.createSocket(SocketType.REQ);
+        db_client_socket.connect("tcp://"+ip_addr_p2p_server+":"+port_subscribe);
+        db_client_socket.send(ip_addr+":"+user_name);
+        if (db_client_socket.recvStr() == "ok"){
+            System.out.println("user registration to p2p server completed.");
+        }else{
+            System.out.println("user registration to p2p server failed.");
+        }
+
+        System.out.println("starting message transfer procedure.");
+
+        ZContext relay_client = new ZContext();
+        ZMQ.Socket p2p_rx = relay_client.createSocket(SocketType.SUB);
+        p2p_rx.subscribe("RELAY".getBytes());
+        p2p_rx.connect("tcp://"+ip_addr_p2p_server+":"+port_chat_publisher);
+        ZMQ.Socket p2p_tx = relay_client.createSocket(SocketType.PUSH);
+        p2p_tx.connect("tcp://"+ip_addr_p2p_server+":"+port_chat_collector);
+
+        System.out.println("starting autonomous message transmit and receive scenario.");
+
+
     }
 }
